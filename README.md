@@ -42,6 +42,9 @@ uv pip install -r requirements.txt
 
 (Si usas pip tradicional: pip install -r requirements.txt)
 
+> [!IMPORTANTE] GROQ_API_KEY
+> Tienes que configurar tu groq api key a ser posible en el app/graph/router.py si no está
+
 ### 3. Levantar el Servidor
 
 Para iniciar el backend de FastAPI con recarga en vivo, ejecuta el siguiente comando desde la raíz del proyecto:
