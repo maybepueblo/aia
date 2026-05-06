@@ -159,7 +159,7 @@ def nodo_food(state):
     from pathlib import Path
     from app.db.database import get_users_db
     
-    os.environ["GROQ_API_KEY"] = "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"
+    os.environ["GROQ_API_KEY"] = "YOUR_GROQ_API_KEY"  # Asegúrate de configurar tu clave de API de Groq aquí
 
     p4_path = str(Path(__file__).parent.parent.parent / "p4_food")
     if p4_path not in sys.path:
