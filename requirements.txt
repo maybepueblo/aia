@@ -1,0 +1,32 @@
+# --- Core Backend & API ---
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+
+# --- IA & Agentes (LangGraph) ---
+langgraph>=0.1.0
+langchain-core>=0.1.0
+langchain-groq>=0.1.0
+
+# --- Seguridad & Biometría ---
+deepface>=0.0.79
+cryptography>=42.0.0
+
+# --- Visión Artificial (M3) ---
+opencv-python-headless>=4.9.0
+easyocr>=1.7.1
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# --- NLP & Análisis de Esfuerzo (M2) ---
+pysentimiento>=0.7.0
+transformers>=4.35.0
+accelerate>=0.24.0
+
+# --- Dietas, Optimización & Datos (M4) ---
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.4.0
+deap>=1.4.1

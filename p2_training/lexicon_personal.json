@@ -1,0 +1,44 @@
+{
+  "sentadillas": {
+    "series": 4,
+    "reps": 10,
+    "peso_kg": 60.0,
+    "es_bw": false,
+    "updated_at": "2026-05-06"
+  },
+  "abdominales": {
+    "series": 3,
+    "reps": 12,
+    "peso_kg": 50.0,
+    "es_bw": false,
+    "updated_at": "2026-05-06"
+  },
+  "extensiones": {
+    "series": 3,
+    "reps": 15,
+    "peso_kg": null,
+    "es_bw": true,
+    "updated_at": "2026-05-06"
+  },
+  "press banca": {
+    "series": 4,
+    "reps": 10,
+    "peso_kg": 60.0,
+    "es_bw": false,
+    "updated_at": "2026-05-06"
+  },
+  "jalon": {
+    "series": 3,
+    "reps": 12,
+    "peso_kg": 50.0,
+    "es_bw": false,
+    "updated_at": "2026-05-06"
+  },
+  "fondos": {
+    "series": 3,
+    "reps": 15,
+    "peso_kg": null,
+    "es_bw": true,
+    "updated_at": "2026-05-06"
+  }
+}

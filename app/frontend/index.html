@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WellnessAI - Asistente Integral</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Colores originales restaurados */
+      --bg: #131314; 
+      --surface: #1e1f20; 
+      --surface-hover: #333537;
+      --text: #e3e3e3; 
+      --text-muted: #c4c7c5; 
+      --border: #444746;
+      --accent: #a8c7fa; 
+      --gradient: linear-gradient(74deg, #4285f4 0%, #9b72cb 46%, #d96570 100%);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Google Sans', sans-serif; }
+
+    /* Bloqueamos el scroll en el body, obligando a que solo el chat haga scroll */
+    body { background-color: var(--bg); color: var(--text); height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* --- VIEW: LOGIN FACIAL --- */
+    #login-view {
+      position: fixed; inset: 0; background: var(--bg); z-index: 100;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    }
+    .video-container { width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid var(--surface); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+    video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+    .login-controls { display: flex; flex-direction: column; gap: 15px; width: 300px; }
+    input[type="text"] { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 12px 20px; border-radius: 24px; outline: none; font-size: 16px; text-align: center; }
+    .btn-auth { background: var(--text); color: var(--bg); border: none; padding: 12px 24px; border-radius: 24px; font-weight: 500; cursor: pointer; transition: 0.2s; }
+    .btn-auth:hover { background: var(--accent); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+
+    /* --- VIEW: APP (Estilo Gemini) --- */
+    #app-view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+
+    /* Header */
+    header { flex-shrink: 0; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid transparent; }
+    .logo { font-size: 20px; font-weight: 500; }
+    .user-badge { background: var(--surface); padding: 6px 14px; border-radius: 16px; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .user-badge:hover { background: var(--surface-hover); }
+
+    /* Main Content / Chat */
+    .main-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20px;
+      scroll-behavior: smooth;
+    }
+
+    .greeting-container { margin: auto; padding: 40px 20px; text-align: left; max-width: 800px; width: 100%; }
+    .greeting { font-size: 54px; font-weight: 500; line-height: 1.1; letter-spacing: -1px; }
+    .greeting .name { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    /* Chat Bubbles */
+    .chat-history { max-width: 800px; width: 100%; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 24px; }
+    .msg { display: flex; gap: 16px; line-height: 1.6; }
+    .msg.user { flex-direction: row-reverse; }
+    .bubble { max-width: 80%; padding: 12px 18px; border-radius: 18px; font-size: 15px; }
+    .msg.user .bubble { background: var(--surface); border-bottom-right-radius: 4px; }
+    .msg.ai .bubble { background: transparent; }
+
+    /* Input Area */
+    .input-area {
+      flex-shrink: 0;
+      background: var(--bg);
+      padding: 15px 20px 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .suggestions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 800px; }
+    .pill { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); padding: 10px 16px; border-radius: 16px; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+    .pill:hover { background: var(--surface-hover); color: var(--text); }
+
+    .input-box { width: 100%; max-width: 800px; background: var(--surface); border-radius: 32px; display: flex; align-items: center; padding: 8px 16px; }
+    .input-box textarea { flex: 1; background: transparent; border: none; color: var(--text); padding: 14px 10px; font-size: 16px; outline: none; resize: none; overflow-y: hidden; min-height: 48px; max-height: 150px; font-family: inherit; }
+    .input-box textarea::placeholder { color: var(--border); }
+    .btn-icon { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; padding: 10px; border-radius: 50%; }
+    .btn-icon:hover { background: var(--surface-hover); color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- Modal de Perfil / Onboarding -->
+  <div id="profile-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200; align-items:center; justify-content:center;">
+    <div style="background:var(--surface); padding:30px; border-radius:24px; width:90%; max-width:400px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+      <h3 id="profile-title" style="margin-bottom:20px; font-weight: 500;">Tu Perfil Físico</h3>
+      <p style="color:var(--text-muted); font-size:14px; margin-bottom: 20px;">Estos datos afinarán las predicciones de bienestar y dietas.</p>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <input type="number" id="p-edad" placeholder="Edad (ej. 25)" style="padding:12px; border-radius:12px; background:var(--bg); border:1px solid var(--border); color:white; outline:none;">
+
+        <select id="p-genero" style="padding:12px; border-radius:12px; background:var(--bg); border:1px solid var(--border); color:white; outline:none;">
+          <option value="">Selecciona tu género...</option>
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+        </select>
+
+        <input type="number" id="p-peso" placeholder="Peso en kg (ej. 75)" style="padding:12px; border-radius:12px; background:var(--bg); border:1px solid var(--border); color:white; outline:none;">
+        <input type="number" id="p-altura" placeholder="Altura en cm (ej. 180)" style="padding:12px; border-radius:12px; background:var(--bg); border:1px solid var(--border); color:white; outline:none;">
+
+        <button onclick="saveProfile()" class="btn-auth" style="margin-top:10px;">Guardar Datos</button>
+        <button onclick="closeProfileModal()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; padding: 10px;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW: LOGIN -->
+  <div id="login-view">
+    <h2 style="font-weight: 500; font-size: 28px;">Bienvenido a <span style="background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">WellnessAI</span></h2>
+    <div class="video-container">
+      <video id="video" autoplay muted playsinline></video>
+    </div>
+    <div class="login-controls">
+      <input type="text" id="username" placeholder="Tu nombre">
+      <button class="btn-auth" onclick="authenticate('login')">Ingresar con Face ID</button>
+      <button class="btn-auth btn-outline" onclick="authenticate('register')">Registrar Nuevo Rostro</button>
+    </div>
+    <div id="login-status" style="color: var(--accent); margin-top: 10px; font-size: 14px; text-align:center;"></div>
+  </div>
+
+  <!-- VIEW: APP -->
+  <div id="app-view">
+    <header>
+      <div class="logo">Wellness<span style="color:var(--accent)">AI</span></div>
+      <div style="display: flex; gap: 12px;">
+        <div class="user-badge" onclick="newChat()" style="background: transparent; border: 1px solid var(--border);">🔄 Nuevo Chat</div>
+        <div class="user-badge" id="user-badge" onclick="loadProfile()">User ⚙️</div>
+      </div>
+    </header>
+
+    <div class="main-container" id="main-container">
+      <div class="greeting-container" id="greeting-container">
+        <div class="greeting">
+          <span class="name">¡Hola, <span id="display-name">Usuario</span>!</span><br>
+          ¿En qué te puedo ayudar hoy?
+        </div>
+      </div>
+      <div class="chat-history" id="chat-history"></div>
+    </div>
+
+    <div class="input-area">
+      <div class="suggestions">
+        <button class="pill" onclick="presetMsg('Analiza mi día: dormí 6h, estoy estresado')">🧘‍♂️ Analizar Hábitos</button>
+        <button class="pill" onclick="presetMsg('Quiero registrar un entreno')">💪 Registrar Entreno</button>
+        <button class="pill" onclick="presetMsg('Analiza esta etiqueta nutricional')">📷 Escanear Etiqueta</button>
+        <button class="pill" onclick="presetMsg('Dame un menú para ganar masa muscular')">🍽️ Crear Dieta</button>
+      </div>
+      <div class="input-box">
+        <input type="file" id="file-input" style="display:none" accept="image/*" onchange="previewImage(event)">
+        <button class="btn-icon" onclick="document.getElementById('file-input').click()">+</button>
+        <textarea id="chat-input" placeholder="Pregunta a WellnessAI" rows="1" oninput="autoResize(this)"></textarea>
+        <button class="btn-icon" onclick="sendMessage()">➤</button>
+      </div>
+      <div id="img-preview-container" style="display:none; align-self: flex-start; margin-left: 50px; background: var(--surface); padding: 5px; border-radius: 8px;">
+         <img id="img-preview" src="" style="max-height: 60px; border-radius: 4px;">
+         <span style="cursor:pointer; color:var(--text-muted); margin-left:5px; vertical-align:top;" onclick="clearImage()">✖</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "http://127.0.0.1:8000";
+    let currentUser = null;
+    let selectedFile = null;
+
+    // --- Cámara para Face ID ---
+    async function initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('video').srcObject = stream;
+      } catch (e) {
+        document.getElementById('login-status').innerText = "❌ Necesitas dar permiso a la cámara";
+      }
+    }
+    initCamera();
+
+    function captureFrame() {
+      const video = document.getElementById('video');
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
+    }
+
+    async function authenticate(action) {
+      const name = document.getElementById('username').value.trim();
+      if (!name) return alert("Introduce un nombre.");
+
+      document.getElementById('login-status').innerText = "⌛ Analizando rostro...";
+      const blob = await captureFrame();
+      const fd = new FormData();
+      fd.append("nombre", name);
+      fd.append("foto", blob, "face.jpg");
+
+      try {
+        const res = await fetch(`${API_URL}/auth/${action}`, { method: 'POST', body: fd });
+        const data = await res.json();
+
+        if (res.ok) {
+          currentUser = data.user_id;
+          document.getElementById('display-name').innerText = name;
+          document.getElementById('user-badge').innerHTML = `${name} ⚙️`;
+
+          if (action === 'register') {
+              document.getElementById('login-view').style.display = 'none';
+              document.getElementById('profile-modal').style.display = 'flex';
+          } else {
+              document.getElementById('login-status').innerText = `✅ ¡Hola ${name}!`;
+              setTimeout(() => {
+                document.getElementById('login-view').style.display = 'none';
+                document.getElementById('app-view').style.display = 'flex';
+              }, 800);
+          }
+        } else {
+          document.getElementById('login-status').innerText = `❌ ${data.detail || 'Error'}`;
+        }
+      } catch (e) {
+        document.getElementById('login-status').innerText = "❌ Error conectando al servidor";
+      }
+    }
+
+    // --- Lógica del Perfil de Usuario ---
+    async function loadProfile() {
+      if(!currentUser) return;
+      try {
+        const res = await fetch(`${API_URL}/api/profile/${currentUser}`);
+        const data = await res.json();
+        if(data.profile) {
+          document.getElementById('p-edad').value = data.profile.edad || '';
+          document.getElementById('p-genero').value = data.profile.genero || '';
+          document.getElementById('p-peso').value = data.profile.peso_kg || '';
+          document.getElementById('p-altura').value = data.profile.altura_cm || '';
+        }
+        document.getElementById('profile-modal').style.display = 'flex';
+      } catch(e) { console.error("Error cargando perfil"); }
+    }
+
+    async function saveProfile() {
+      const payload = {
+        user_id: currentUser,
+        edad: parseInt(document.getElementById('p-edad').value) || null,
+        genero: document.getElementById('p-genero').value || null,
+        peso_kg: parseFloat(document.getElementById('p-peso').value) || null,
+        altura_cm: parseFloat(document.getElementById('p-altura').value) || null
+      };
+
+      try {
+        await fetch(`${API_URL}/api/profile`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        closeProfileModal();
+      } catch(e) { alert("Error al guardar el perfil"); }
+    }
+
+    function closeProfileModal() {
+        document.getElementById('profile-modal').style.display = 'none';
+        if (currentUser) {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('app-view').style.display = 'flex';
+        }
+    }
+
+    function newChat() {
+        if (!confirm("¿Empezar un nuevo chat? Se limpiará la pantalla actual.")) return;
+        document.getElementById('chat-history').innerHTML = '';
+        document.getElementById('greeting-container').style.display = 'block';
+    }
+
+    // --- Lógica de la Interfaz de Chat ---
+    function previewImage(event) {
+      selectedFile = event.target.files[0];
+      if(selectedFile) {
+        document.getElementById('img-preview').src = URL.createObjectURL(selectedFile);
+        document.getElementById('img-preview-container').style.display = 'block';
+      }
+    }
+
+    function clearImage() {
+      selectedFile = null;
+      document.getElementById('file-input').value = "";
+      document.getElementById('img-preview-container').style.display = 'none';
+    }
+
+    function presetMsg(text) {
+      const input = document.getElementById('chat-input');
+      input.value = text;
+      autoResize(input);
+      sendMessage();
+    }
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    document.getElementById('chat-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    function appendMsg(role, text, imageSrc = null) {
+      document.getElementById('greeting-container').style.display = 'none';
+      const hist = document.getElementById('chat-history');
+      const msg = document.createElement('div');
+      msg.className = `msg ${role}`;
+
+      let content = `<div class="bubble">`;
+      if (imageSrc) {
+        content += `<img src="${imageSrc}" style="max-width:200px; border-radius:8px; display:block; margin-bottom:10px;">`;
+      }
+      
+      let formattedText = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      content += `${formattedText}</div>`;
+
+      msg.innerHTML = content;
+      hist.appendChild(msg);
+
+      setTimeout(() => {
+        const container = document.getElementById('main-container');
+        container.scrollTop = container.scrollHeight;
+      }, 100);
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text && !selectedFile) return;
+
+      let imageSrc = selectedFile ? URL.createObjectURL(selectedFile) : null;
+      appendMsg('user', text || '📷 [Imagen enviada]', imageSrc);
+      input.value = '';
+      input.style.height = 'auto'; 
+      
+      const fd = new FormData();
+      fd.append("user_id", currentUser);
+      fd.append("mensaje", text);
+      if (selectedFile) {
+        fd.append("imagen", selectedFile);
+        clearImage();
+      }
+
+      try {
+        const loadingId = "loading-" + Date.now();
+        const hist = document.getElementById('chat-history');
+        hist.insertAdjacentHTML('beforeend', `<div id="${loadingId}" class="msg ai"><div class="bubble" style="color:var(--text-muted)">Escribiendo...</div></div>`);
+        
+        const res = await fetch(`${API_URL}/chat`, { method: 'POST', body: fd });
+        const data = await res.json();
+        
+        document.getElementById(loadingId).remove();
+        
+        // Justo después de recibir 'const data = await res.json();'
+        let aiImgSrc = null;
+        if (data.imagen_b64) {
+            aiImgSrc = "data:image/jpeg;base64," + data.imagen_b64;
+        }
+        appendMsg('ai', data.respuesta || 'Sin respuesta del servidor.', aiImgSrc);
+      } catch(e) {
+        appendMsg('ai', '⚠️ Error de conexión.');
+      }
+    }
+  </script>
+</body>
+</html>

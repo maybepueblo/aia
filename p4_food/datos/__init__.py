@@ -1,0 +1,1 @@
+from .catalogo import CatalogoAlimentos

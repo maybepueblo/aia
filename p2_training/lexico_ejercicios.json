@@ -1,0 +1,227 @@
+{
+  "press banca": {
+    "PECTORAL":           10,
+    "DELTOIDES_ANTERIOR":  6,
+    "TRICEPS":             7,
+    "ABDOMEN":             2
+  },
+  "press banca inclinado": {
+    "PECTORAL":            8,
+    "DELTOIDES_ANTERIOR":  8,
+    "TRICEPS":             6,
+    "ABDOMEN":             2
+  },
+  "press banca declinado": {
+    "PECTORAL":            9,
+    "DELTOIDES_ANTERIOR":  3,
+    "TRICEPS":             7,
+    "ABDOMEN":             2
+  },
+  "chest press": {
+    "PECTORAL":           10,
+    "DELTOIDES_ANTERIOR":  5,
+    "TRICEPS":             6,
+    "ABDOMEN":             2
+  },
+  "aperturas": {
+    "PECTORAL":            9,
+    "DELTOIDES_ANTERIOR":  4,
+    "DELTOIDES_LATERAL":   2,
+    "ABDOMEN":             2
+  },
+  "flexiones": {
+    "PECTORAL":            8,
+    "DELTOIDES_ANTERIOR":  5,
+    "TRICEPS":             6,
+    "ABDOMEN":             3
+  },
+
+  "press militar": {
+    "DELTOIDES_ANTERIOR":  9,
+    "DELTOIDES_LATERAL":   7,
+    "DELTOIDES_POSTERIOR": 2,
+    "TRAPECIO":            4,
+    "TRICEPS":             6
+  },
+  "elevaciones laterales": {
+    "DELTOIDES_LATERAL":  10,
+    "DELTOIDES_ANTERIOR":  3,
+    "TRAPECIO":            2
+  },
+  "elevaciones frontales": {
+    "DELTOIDES_ANTERIOR":  9,
+    "DELTOIDES_LATERAL":   2,
+    "TRAPECIO":            2
+  },
+  "pajaros": {
+    "DELTOIDES_POSTERIOR": 10,
+    "DELTOIDES_LATERAL":    3,
+    "TRAPECIO":             5,
+    "ESPALDA_ALTA":         4
+  },
+
+  "dominadas": {
+    "ESPALDA_ALTA":         9,
+    "ESPALDA_BAJA":         4,
+    "DELTOIDES_POSTERIOR":  3,
+    "TRAPECIO":             5,
+    "BICEPS":               8,
+    "TRICEPS":              2,
+    "ANTEBRAZO":            4,
+    "ABDOMEN":              3
+  },
+  "remo barra": {
+    "ESPALDA_ALTA":         9,
+    "ESPALDA_BAJA":         5,
+    "DELTOIDES_POSTERIOR":  5,
+    "TRAPECIO":             7,
+    "BICEPS":               6,
+    "TRICEPS":              2,
+    "ANTEBRAZO":            4,
+    "ABDOMEN":              2
+  },
+  "remo polea": {
+    "ESPALDA_ALTA":         9,
+    "ESPALDA_BAJA":         4,
+    "DELTOIDES_POSTERIOR":  4,
+    "TRAPECIO":             5,
+    "BICEPS":               6,
+    "TRICEPS":              2,
+    "ANTEBRAZO":            3,
+    "ABDOMEN":              2
+  },
+  "pull over": {
+    "PECTORAL":             4,
+    "ESPALDA_ALTA":         8,
+    "ESPALDA_BAJA":         3,
+    "TRAPECIO":             3,
+    "BICEPS":               3,
+    "TRICEPS":              4
+  },
+
+  "jalon triceps": {
+    "TRICEPS":             10,
+    "ANTEBRAZO":            3
+  },
+  "jalon de triceps": {
+    "TRICEPS":             10,
+    "ANTEBRAZO":            3
+  },
+  "polea triceps": {
+    "TRICEPS":             10,
+    "ANTEBRAZO":            3
+  },
+  "polea de triceps": {
+    "TRICEPS":             10,
+    "ANTEBRAZO":            3
+  },
+  "fondos": {
+    "PECTORAL":             5,
+    "DELTOIDES_ANTERIOR":   4,
+    "TRICEPS":              9
+  },
+  "extension triceps": {
+    "TRICEPS":             10,
+    "ANTEBRAZO":            2
+  },
+
+  "curl biceps": {
+    "BICEPS":              10,
+    "ANTEBRAZO":            5
+  },
+  "curl martillo": {
+    "BICEPS":               7,
+    "ANTEBRAZO":            9
+  },
+  "curl concentrado": {
+    "BICEPS":              10,
+    "ANTEBRAZO":            4
+  },
+
+  "sentadilla": {
+    "CUADRICEPS":          10,
+    "GLUTEOS":              7,
+    "ISQUIOTIBIALES":       4,
+    "ESPALDA_BAJA":         5,
+    "TRICEPS":              4,
+    "ABDOMEN":              5
+  },
+  "sentadilla sumo": {
+    "CUADRICEPS":           7,
+    "GLUTEOS":              9,
+    "ISQUIOTIBIALES":       6,
+    "ESPALDA_BAJA":         4,
+    "ABDOMEN":              4
+  },
+  "prensa": {
+    "CUADRICEPS":          10,
+    "GLUTEOS":              6,
+    "ISQUIOTIBIALES":       5,
+    "TRICEPS":              3,
+    "ABDOMEN":              3
+  },
+  "extension cuadriceps": {
+    "CUADRICEPS":          10
+  },
+  "peso muerto": {
+    "ESPALDA_BAJA":         9,
+    "ESPALDA_ALTA":         6,
+    "TRAPECIO":             5,
+    "GLUTEOS":              8,
+    "ISQUIOTIBIALES":       8,
+    "CUADRICEPS":           4,
+    "BICEPS":               3,
+    "ANTEBRAZO":            3,
+    "ABDOMEN":              4
+  },
+  "peso muerto rumano": {
+    "ESPALDA_BAJA":         8,
+    "ESPALDA_ALTA":         4,
+    "TRAPECIO":             3,
+    "GLUTEOS":              8,
+    "ISQUIOTIBIALES":      10,
+    "BICEPS":               2,
+    "ANTEBRAZO":            2,
+    "ABDOMEN":              3
+  },
+  "curl femoral": {
+    "ISQUIOTIBIALES":      10,
+    "GLUTEOS":              3
+  },
+  "hip thrust": {
+    "GLUTEOS":             10,
+    "ISQUIOTIBIALES":       6,
+    "CUADRICEPS":           4,
+    "ESPALDA_BAJA":         4,
+    "ABDOMEN":              3
+  },
+  "zancadas": {
+    "CUADRICEPS":           9,
+    "GLUTEOS":              7,
+    "ISQUIOTIBIALES":       5,
+    "ESPALDA_BAJA":         3,
+    "ABDOMEN":              3
+  },
+  "gemelo maquina": {
+    "GEMELO":              10,
+    "SOLEO":                4
+  },
+  "elevacion talon": {
+    "SOLEO":               10,
+    "GEMELO":               7
+  },
+
+  "plancha": {
+    "ABDOMEN":             10,
+    "ESPALDA_BAJA":         4,
+    "GLUTEOS":              3
+  },
+  "crunch": {
+    "ABDOMEN":             10
+  },
+  "rueda abdominal": {
+    "ABDOMEN":             10,
+    "ESPALDA_BAJA":         3,
+    "TRICEPS":              4
+  }
+}
